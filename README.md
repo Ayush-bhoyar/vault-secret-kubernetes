@@ -13,5 +13,21 @@ helm repo update
 helm install vault hashicorp/vault --set "server.dev.enabled=true"
 ```
 
+```
+helm repo add external-secrets https://charts.external-secrets.io
+helm repo update
+helm install external-secrets external-secrets/external-secrets --namespace external-secrets --create-namespace --set installCRDs=true
+```
+
+## Steps to be followed
+
+1. Create a secret for vault-token
+```
+kubectl create secret generic vault-token \
+  --namespace default \
+  --from-literal=token=root
+```
+
+2. 
 
 
