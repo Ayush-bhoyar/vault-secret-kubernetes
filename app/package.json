@@ -1,0 +1,13 @@
+{
+  "name": "vault-db-app",
+  "version": "1.0.0",
+  "description": "Node.js app that connects to PostgreSQL using Kubernetes secrets from Vault",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.3",
+    "pg": "^8.11.5"
+  }
+}
