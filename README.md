@@ -5,6 +5,17 @@
 1. Install kubectl: https://kubernetes.io/docs/tasks/tools/install-kubectl-linux/
 2. Install helm: https://helm.sh/docs/intro/install/
 
+## Install eksctl
+```
+curl --silent --location "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C /tmp
+sudo mv /tmp/eksctl /usr/local/bin
+```
+
+## Create a cluster
+```
+eksctl create cluster --name my-cluster --region ap-south-1 --node-type t2.medium --version 1.35
+```
+
 ## Install hashicorp vault on the cluster
 
 ```
