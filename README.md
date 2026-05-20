@@ -13,10 +13,27 @@ helm repo update
 helm install vault hashicorp/vault --set "server.dev.enabled=true"
 ```
 
+Make the type of service as LoadBalancer
+```
+kubectl edit svc/vault
+```
+
 ```
 helm repo add external-secrets https://charts.external-secrets.io
 helm repo update
 helm install external-secrets external-secrets/external-secrets --namespace external-secrets --create-namespace --set installCRDs=true
+```
+
+## Install EBS CSI driver 
+
+```
+aws iam attach-role-policy \
+  --role-name <NodeInstanceRoleName> \
+  --policy-arn arn:aws:iam::aws:policy/service-role/AmazonEBSCSIDriverPolicy
+```
+
+```
+kubectl apply -k "github.com/kubernetes-sigs/aws-ebs-csi-driver/deploy/kubernetes/overlays/stable/?ref=release-1.44"
 ```
 
 ## Steps to be followed
@@ -29,15 +46,20 @@ kubectl create secret generic vault-token \
 ```
 
 2. Add secrets to the vault
+
+3. Build a docker image and push to the docker hub
 ```
-vault secrets enable -path=apps kv-v2
+docker build -t <your-docker-account-name>/vault-db-app:latest app/
+docker push <your-docker-account-name>/vault-db-app:latest
 ```
 
+5. Apply sequence
 ```
-vault kv put -mount=apps my-app DB_USERNAME=appuser DB_PASSWORD=apppassword
-vault kv put -mount=apps docker-creds docker_username=gauris17 docker_password=Password@123
-```
-
-```
-vault kv get apps/my-app
+cd k8s/
+kubectl apply -f namespace.yaml
+kubectl apply -f cluster-secret.yaml
+kubectl apply -f external-secret.yaml
+kubectl apply -f external-secret-docker.yaml
+kubectl apply -f postgres.yaml
+kubectl apply -f app.yaml
 ```
