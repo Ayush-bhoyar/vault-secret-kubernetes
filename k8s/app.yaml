@@ -17,7 +17,7 @@ spec:
         - name: docker-creds
       containers:
         - name: vault-db-app
-          image: gauris17/vault-db-app:latest
+          image: ayushdocker2607/vault-eso-demo:v1
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 3000
